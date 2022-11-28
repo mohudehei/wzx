@@ -1,0 +1,492 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>web1</title>
+<style type="text/css">
+	.a{
+		position:absolute;
+		left:75px;
+		top:35px;
+		font-size:30px;
+	}
+	.b{
+		position:absolute;
+		left:75px;
+		top:105px;
+		font-size:15px;
+	}
+body {
+    background-color: #FCE7C4;
+}
+</style>
+</head>
+<body>
+	<p></p>
+	<p style="font-size: 28px"><a href="web1.html">我的学习（点击此处可返回）</p><</a></p>
+<p></p>
+
+<p><strong>没什么好写的，复制点头歌代码吧，也当作我的一个代码存放站。</strong></p>
+	<p></p>
+<p></p>
+		<p style="font-size: 18px">实验二第9关：数据加密</p>
+        <pre>
+            <code class="language-c">
+    <span style="font-size: 12px">#include <stdio.h>
+
+char cut_and_construct(char);
+void swap(int *, int *);
+
+void main(){
+	char a[20];
+	int i = 0;
+	fgets(a, 20, stdin);
+	while(a[i] != '\0' && a[i] != '\n'){
+		a[i] = cut_and_construct(a[i]);
+		i++;
+	}
+	printf("%s", a);
+	getchar();getchar();
+}
+
+char cut_and_construct(char obj){
+	int sign[8] = {0};
+	int flag, tmp;
+	char final = 0;
+	for(flag = 0; flag < 8; flag++, obj >>= 1){
+		if(obj&1)
+			sign[flag] = 1;
+	}
+	//_________________________________//
+	for(flag = 0; flag <= 4; flag += 2)
+		swap(sign+flag, sign+flag+1);
+	//_________________________________//
+	if(sign[6]){
+		tmp = sign[5];
+		for(flag = 4; flag >= 0; flag--)
+			sign[flag+1] = sign[flag];
+		sign[0] = tmp;
+	}
+	//_________________________________//
+	for(flag = 7; flag > 0; flag--){
+		if(sign[flag])
+			final = (final + 1)<<1;
+		else
+			final <<= 1;
+	}
+	if(sign[0])
+		final++;
+	return final;
+}
+
+void swap(int *a, int *b){
+	int c;
+	c = *a;
+	*a = *b;
+	*b = c;
+}</span>
+            </code>
+        </pre>
+<p></p>
+<p></p>
+		<p style="font-size: 18px">实验三第12关：输出abcde/fghij=x表达式</p>
+        <pre>
+            <code class="language-c">
+    <span style="font-size: 12px">
+#include <stdio.h>
+
+int main()
+{
+   int n,x,y,temp;//a[10]={0};
+    int i,j,flag;
+    scanf("%d",&n);
+    for(x=12345;x<=98765;x++)
+{
+       int a[10]={0};
+        flag = 1;
+        temp = x;    
+        if(x%n== 0)                       
+        {
+        
+             y = x/n;
+             for(i=4;i>=0;i--)
+             {
+                 a[i] = y%10;
+                y = y/10;
+            }
+         }
+        
+        for(i=9;i>=5;i--)                
+                 {
+          a[i] = temp%10;
+          temp = temp/10;
+             
+         }
+         
+        for(i=0;i<9;i++)              
+        {
+             for(j=i+1;j<=9;j++)
+             {
+                 if(a[i] == a[j])
+                 {
+                     flag = 0;
+                     break;
+                 }
+             }
+             if(flag ==0)
+                 break;
+         }
+         
+         if(flag==1)                        //打印 
+         {
+             for(i=5;i<=9;i++)
+                 printf("%d",a[i]);
+             printf("/");
+             for(i=0;i<5;i++)
+                 printf("%d",a[i]);
+            printf("=%d\n",n);
+         }    
+     }
+     return 0;
+ }</span>
+            </code>
+        </pre>
+<p></p>
+<p></p>
+		<p style="font-size: 18px">实验五第10关：消除类游戏</p>
+        <pre>
+            <code class="language-c">
+    <span style="font-size: 12px">
+#include<stdio.h>
+#define N 30
+int n, m;
+int a[N][N], b[N][N];
+void mache(int[][N], int[][N], int, int);
+ 
+int main()
+{
+	int i, j;
+	scanf("%d %d", &n, &m);
+	for (i = 0; i < n; i++)
+		for (j = 0; j < m; j++)
+			scanf("%d", &a[i][j]);
+	mache(a, b, n, m);
+ 
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < m; j++)
+			{
+                printf("%d", a[i][j]);
+                if(j!=m-1) printf(" ");
+            }
+        printf("\n");
+	}
+	return 0;
+}
+void mache(int a[][N], int b[][N], int n, int m)
+{
+	int i, j;
+	for (i = 0; i < n; i++)	
+		for (j = 0; j < m - 2; j++)		
+			if (a[i][j] == a[i][j + 1] && a[i][j] == a[i][j + 2]) //行上有连续的则标记
+				b[i][j] = b[i][j + 1] = b[i][j + 2] = 1;
+ 
+		
+	
+	for (i = 0; i < n - 2; i++)	
+		for (j = 0; j < m; j++)		
+			if (a[i][j] == a[i + 1][j] && a[i][j] == a[i + 2][j])//列上有连续的则标记
+				b[i][j] = b[i + 1][j] = b[i + 2][j] = 1;
+ 
+	for (i = 0; i < n; i++)	
+		for (j = 0; j < m; j++)	
+			if (b[i][j] == 1) //根本b数组做过标识的位置把a对应位置写为0	
+				a[i][j] = 0;
+	
+}
+</span>
+            </code>
+        </pre>
+<p></p>
+<p></p>
+		<p style="font-size: 18px">实验五第12关：迷宫问题</p>
+        <pre>
+            <code class="language-c">
+    <span style="font-size: 12px">
+#include<stdio.h>
+#include<string.h>
+#define N 1001
+struct st{
+	int x;
+	int y;
+}s[N];
+int Map[N][N];//地图
+int step[N][N];//路径地图 
+int flag[N][N];//标记地图 
+int next[4][2]={{1,0},{0,1},{-1,0},{0,-1}};
+int n,m,k=1,num=1;
+void input()
+{
+	s[0].x=s[0].y=1;
+	for(int i=0;i<k;i++)
+	{
+		int x=s[i].x;
+		int y=s[i].y;
+		step[x][y]=1; 
+		
+	}
+	printf("%d\n",num++);//输出路径编号 
+	for(int i=1;i<=n;i++)//输出地图路径 
+	{
+		for(int j=1;j<=m;j++)
+		{
+			printf("%d",step[i][j]);
+			if(j!=m)
+			printf(" ");
+		}
+		printf("\n");
+	}
+	memset(step,0,sizeof(step)); 
+}
+void dsf(int x,int y)
+{
+	if(x==n&&y==m)
+	{//到达终点,输出 
+		input(); 
+		return;
+	}
+	int nx,ny;
+	for(int i=0;i<4;i++)
+	{
+		nx=x+next[i][0];
+		ny=y+next[i][1];
+		if(nx<=n&&ny<=m)//判断是否越界,是否可通过 
+		if(flag[nx][ny]==0&&Map[nx][ny]==1)
+		{
+			flag[nx][ny]=1;
+			s[k].x=nx;
+			s[k++].y=ny;
+			dsf(nx,ny); 
+			flag[nx][ny]=0; 
+			k--;
+		}
+	}	
+}
+int main() 
+{
+	memset(Map,0,sizeof(Map));//置0 
+	memset(flag,0,sizeof(flag));
+	scanf("%d%d",&n,&m);//行 列 
+	for(int i=1;i<=n;i++)//地图 
+	{
+		for(int j=1;j<=m;j++)
+		{
+			scanf("%d",&Map[i][j]);
+		}
+	}
+	dsf(1,1);//从左上角开始,向右下角走 
+	return 0;
+}
+
+</span>
+            </code>
+        </pre>
+<p></p>
+<p></p>
+		<p style="font-size: 18px">实验六第8关：旋转图像</p>
+        <pre>
+            <code class="language-c">
+    <span style="font-size: 12px">
+#include<stdio.h>
+int main()
+{
+    int n,m;
+    scanf("%d%d",&n,&m);
+    int a[n][m];
+    int b[m][n];
+    int i,j;
+    for(i=0;i<n;i++)
+        for(j=0;j<m;j++)
+            {
+                scanf("%d",&a[i][j]);
+            }
+            
+    int q=0;
+    int w=0;
+    for(i=m-1;i>=0;i--)
+        for(j=0;j<n;j++)
+            {
+                if(q==n)
+                {
+                    q=0;
+                    w++;
+                }    
+                b[w][q]=a[j][i];
+                q++;
+            }
+    for(i=0;i<m;i++)
+        for(j=0;j<n;j++)
+            {
+                if(j!=n-1)
+                printf("%d ",b[i][j]);
+                if(j==n-1)
+                printf("%d\n",b[i][j]);
+            }
+    return 0;
+}
+
+</span>
+            </code>
+        </pre>
+<p></p>
+<p></p>
+		<p style="font-size: 18px">实验七第9关：逆波兰表达式</p>
+        <pre>
+            <code class="language-c">
+    <span style="font-size: 12px">
+#include<stdio.h>
+#include<string.h>
+
+//进行字符与数字的转换
+void CharTranslateToInt(int *pi,char *pc,int i){
+	pi[i] = (int)(pc[i]) - 48;
+}
+
+int main(void){
+	
+	int i,j,k,temp,shi,ge,num1len,num2len;
+	int num1[100] = {0}, num2[100] = {0};
+	char str[100]; 
+	int sum[200] = {0};
+	
+	scanf("%s",str);
+	num1len = strlen(str); 
+	for(i = 0; i < num1len; i++){
+		CharTranslateToInt(num1,str,i);
+	}
+	
+	scanf("%s",str);
+	num2len = strlen(str);
+	for(i = 0; i < num2len; i++){
+		CharTranslateToInt(num2,str,i);
+	}
+//这里将每一次相乘的数加到对应位置上
+	for(i = num1len - 1; i >= 0; i--){
+		for(j = num2len - 1; j >= 0; j--){
+			temp = num1[i] * num2[j];
+			sum[num1len + num2len - 2 - i - j] += temp;
+		}
+	}
+//接下来统一每一位满十往上一位进一
+	for(i = 0; i < 199; i++){
+		ge = sum[i] % 10;
+		shi = sum[i] / 10;
+		sum[i] = ge;
+		sum[i+1] += shi; 
+	}
+	for(i = 199;i >= 0; i--){
+		if(sum[i]){
+			k = i;
+			break;
+		}
+	} 
+	for(i = k; i >= 0; i--){
+		printf("%d",sum[i]);
+	}
+	return 0;
+}
+
+</span>
+            </code>
+        </pre>
+<p></p>
+<p></p>
+		<p style="font-size: 18px">实验六第11关：非负整数积</p>
+        <pre>
+            <code class="language-c">
+    <span style="font-size: 12px">
+#include<stdio.h>
+#include<math.h>
+int flag = 0;
+int time = 0;
+int fuhao = 1;
+void calculate(int num1, int num2, char cal,int* arr)
+{
+    int temp;
+    switch (cal)
+    {
+    case '+':
+        temp = num1 + num2;
+        break;
+    case '-':
+        temp = num2 - num1;
+        break;
+    case '*':
+        temp = num2 * num1;
+        break;
+    case '/':
+        temp = num2 / num1;
+        break;
+    }
+    arr[flag++] = temp;
+}
+int getnum(char ch,int*arr)
+{
+    if (time == 1)
+        return (int)(ch - '0');
+    else if (time >= 2)
+    {
+        flag--; time = 2;
+        return ((int)(ch - '0') + abs(arr[flag] * 10));
+    }
+}
+int main()
+{
+    int buffer[100] = { 0 },temp=0;
+    char ch,after;
+    while ((ch = getchar()) != '\n')
+    {
+        if (ch == ' ')
+        {
+            time = 0;
+            fuhao = 1;
+            continue;
+        }
+        if (ch >= '0' && ch <= '9')
+        {
+            time++;
+            int a=getnum(ch,buffer);
+            buffer[flag++] = a*fuhao;
+        }
+        else if (ch == '-'&&fuhao==1)
+        {
+            after = getchar();
+            ungetc(after, stdin);
+            if (after >= '0' && after <= '9')
+                fuhao = -1;
+            else
+            {
+                time = 0; flag--; fuhao = 1;
+                int num1 = buffer[flag--];
+                int num2 = buffer[flag];
+                calculate(num1, num2, ch, buffer);
+            }
+        }
+        else
+        {
+            time = 0; flag--; fuhao = 1;
+            int num1 = buffer[flag--];
+            int num2 = buffer[flag];
+            calculate(num1, num2, ch,buffer);
+        }
+    }
+    printf("%d", buffer[--flag]);
+    return 0;
+}
+
+</span>
+            </code>
+        </pre>
+</body>
+</html>
